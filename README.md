@@ -18,3 +18,8 @@ Dependencies:
 
 - EEGLAB (https://sccn.ucsd.edu/eeglab/index.php)
 - The image processing toolbox (only the deconvolution step requires this)
+
+Parts of this this code are modified from: 
+van den Brink RL, Murphy PR, Nieuwenhuis S (2016) Pupil Diameter Tracks Lapses of Attention. PLoS ONE 11(10): e0165274. https://doi.org/10.1371/journal.pone.0165274
+If you use this code for a publication, please cite it.
+
