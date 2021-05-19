@@ -95,7 +95,7 @@ for fi = 1:length(filz)
         end
     end
     
-    %% find bad sections of data
+    %% find sections of bad data
     
     %first,find bad data sections by slope and set them to zero. make
     %multiple passes through the data to find peaks that occur over
@@ -145,7 +145,7 @@ for fi = 1:length(filz)
         points(end) = [];
     end    
      
-    %% interpolate bad sections of data
+    %% interpolate sections of bad data
     
     %now interpolate bad sections
     temp = y; temp(points) = [];
@@ -238,7 +238,7 @@ for fi = 1:length(filz)
             end
         end
         
-        %make design matrix 
+        %make full design matrix 
         XX = [];
         for ci = 1:2
             if ci == 1
@@ -247,7 +247,7 @@ for fi = 1:length(filz)
                 s = endpoints;
             end
             m = length(s); %length of event sequence
-            n = ndc; %length of hrf            
+            n = ndc; %length of data section to deconvolve            
             X = zeros(m,n); %the design matrix
             temp = s';
             for i=1:n
@@ -262,8 +262,8 @@ for fi = 1:length(filz)
         for di = 1:size(EEG.data,1)
             y = detrend(EEG.data(di,:)); %pupil data -> remove linear trend
             y = y-mean(y); %mean center
-            es = PX'*(XX'*y'); %explained signal       
-            EEG.data(di,:) = EEG.data(di,:) - es'; %data minus the explained variance due to blinks
+            es = PX'*(XX'*y'); %calcluate the variance explained by sections of bad data      
+            EEG.data(di,:) = EEG.data(di,:) - es'; %data minus the variance due to bad data
         end
         
         %re-interpolate bad sections (after deconvolution, to prevent jumps in the data)
