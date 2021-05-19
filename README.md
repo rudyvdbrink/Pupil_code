@@ -8,10 +8,11 @@ Template MATLAB scripts for importing and preprocessing EyeLink .edf eyetracking
 
 Notes:
 
-- After running these three steps, you should have output .mat files that contain an EEGLAB structure. EEG.data contains the pupil data, where the 1st channel is pupil diameter, the 2nd is gaze X position, and the 3rd is gaze Y position. The variable 'baddata' indexes what samples were artifactual and interpolated across.
+- After running these three steps, you should have output .mat files that contain an EEGLAB structure. EEG.data contains the pupil data, where the 1st channel is pupil diameter, the 2nd is gaze X position, and the 3rd is gaze Y position. The variable 'baddata' indexes what samples were artifactual and interpolated across. Event information is stored in EEG.event.
 - It's possible that some steps are version dependent. I wrote this code in MATLAB 2017b, and using EEGLAB version 14.1.1b.
 - For the code to be able to run, you'd need to change the 'homedir' variable in each script to refer to the directory where you've stored this code. 
 - Raw data (.edf) should be placed in a sub-directory named '/data/raw/'. You can also just run S1_import_pupil, and it will create these folders for you.
+- The code assumes that the sample rate is 1000 Hz. Should this differ, change the variable srate in S2_convert_pupil.m, and please read the comments in S3_preprocess_pupil.m. 
 - Please see the comments within the code for more specifics.
 
 Dependencies:
