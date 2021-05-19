@@ -12,7 +12,7 @@ Notes:
 - It's possible that some steps are version dependent. I wrote this code in MATLAB 2017b, and using EEGLAB version 14.1.1b.
 - For the code to be able to run, you'd need to change the 'homedir' variable in each script to refer to the directory where you've stored this code. 
 - Raw data (.edf) should be placed in a sub-directory named '/data/raw/'. You can also just run S1_import_pupil, and it will create these folders for you.
-- The code assumes that the sample rate is 1000 Hz. Should this differ, change the variable srate in S2_convert_pupil.m, and please read the comments in S3_preprocess_pupil.m. 
+- The code assumes that the sample rate is 1000 Hz. Should this differ, change the variable 'srate' in S2_convert_pupil.m, and please read the comments in S3_preprocess_pupil.m. 
 - Please see the comments within the code for more specifics.
 
 Dependencies:
