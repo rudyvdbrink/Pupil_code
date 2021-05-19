@@ -26,7 +26,7 @@ eeglab, close
 
 if ~exist(wrtdir,'dir'); mkdir(wrtdir); end
 
-%% get files for this participant
+%% get files 
 
 %get list of files to process
 filz = dir([eventsdir '*.asc']);
@@ -50,7 +50,7 @@ for fi = 1:length(filz) % looping through all files to process
     
     %code in this cell will generate the variable 'events' that contains
     %information about stimulus presentation and response information etc.
-    %It is of size n x 2, with n being the number of trials. The three
+    %It is of size n x 2, with n being the number of trials. The two
     %columns indicate 1) timing of the event (in seconds) and 2) type of 
     %event (e.g. which button was pressed)
             
@@ -136,7 +136,6 @@ for fi = 1:length(filz) % looping through all files to process
     
     ALLEEG = EEG;
     
-    pop_eegplot(EEG);
     save([wrtdir outfilename],'EEG');
 
 
