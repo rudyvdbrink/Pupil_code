@@ -64,11 +64,17 @@ for fi = 1:length(filz) % looping through all files to process
     % extracting starting time
     samples = size(event_text{1,1},1);
     firstsample_time = str2num(cell2mat(event_text{1,2}(1)));
+    convert2diam = 0;
     for i = 1:samples
         %this finds the time at which the experimental block started, using
         %an event in the data that signals it
         if strcmp(cell2mat(event_text{1,3}(i)),'Start') == 1 % -> this may need to be modified depending on what you sent as a start recording marker 
             start_time = str2num(cell2mat(event_text{1,2}(i)));
+        end
+        
+        if  strcmp(cell2mat(event_text{1,2}(i)),'AREA') == 1
+            disp('AREA RECORDING DETECTED: Converting to Diameter')
+            convert2diam = 1;
         end
     end
     
@@ -122,7 +128,13 @@ for fi = 1:length(filz) % looping through all files to process
     
     final_pupil      = ((pupil_text{1,4}(cutoff_sample+1:length(prestart_pupil))))';
     final_pupil(2,:) = full_gaze_x(cutoff_sample+1:length(prestart_pupil))';
-    final_pupil(3,:) = full_gaze_y(cutoff_sample+1:length(prestart_pupil))';    
+    final_pupil(3,:) = full_gaze_y(cutoff_sample+1:length(prestart_pupil))';  
+    
+    %% if we accidentally recorded area instead of diameter, perform a conversion
+    
+    if convert2diam         
+        final_pupil(1,:) = 256.*sqrt(final_pupil(1,:) ./ pi);        
+    end
 
     %% creating EEGLAB dataset and saving to file
     

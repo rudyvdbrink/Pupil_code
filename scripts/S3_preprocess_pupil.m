@@ -287,9 +287,10 @@ for fi = 1:length(filz)
                 hold on
                 plot(EEG.data(ci,:),'k');
             end
-        end
+            
+            legend('raw','interpolated','deconvolved')
+        end        
         
-        legend('raw','interpolated','deconvolved')
     end %end deconvolution conditional
     
     %% save data
