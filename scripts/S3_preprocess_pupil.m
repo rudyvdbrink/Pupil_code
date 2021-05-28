@@ -29,9 +29,12 @@ clc
 
 homedir = 'C:\DATA\Pupil_code\';
 
-rawdir = [homedir 'data\converted\']; %this is where the raw data (EEGLAB format) gets read from
-wrtdir = [homedir 'data\processed\']; %this is where the processed data are stored
+rawdir  = [homedir 'data\converted\']; %this is where the raw data (EEGLAB format) gets read from
+wrtdir  = [homedir 'data\processed\']; %this is where the processed data are stored
+funqdir = [homedir 'functions\']; %folder that contains a filter function
+
 if ~exist(wrtdir,'dir'); mkdir(wrtdir); end
+addpath(funqdir);
 
 cd(rawdir)
 filz = dir('*.mat');
@@ -216,6 +219,7 @@ for fi = 1:length(filz)
     %% run deconvolution (if requested)    
       
     if dc        
+      
         startpoints = zeros(size(baddata));
         endpoints   = zeros(size(baddata));
         
@@ -257,10 +261,17 @@ for fi = 1:length(filz)
             XX = cat(2,XX,X); %this is the design matrix            
         end
         
+        
+       
         %remove events from data using deconvolution
         PX = pinv(XX); %pseudo inverse of the design matrix
         for di = 1:size(EEG.data,1)
-            y = detrend(EEG.data(di,:)); %pupil data -> remove linear trend
+            %filter to account for slow drifts
+            y = EEG.data(di,:);
+            if di == 1
+                y = HP_filt(y,EEG.srate,.5);
+            end
+            y = detrend(y); %pupil data -> remove linear trend
             y = y-mean(y); %mean center
             es = PX'*(XX'*y'); %calcluate the variance explained by sections of bad data      
             EEG.data(di,:) = EEG.data(di,:) - es'; %data minus the variance due to bad data
@@ -303,6 +314,15 @@ for fi = 1:length(filz)
 end %end subject loop
 
 
+
+
+%%
+
+%             y = EEG.data(di,:); %pupil data            
+%             p = polyfit(1:length(y),y,8); %fit polynomial
+%             p = getpoly(1:length(y),p); %get polynomial
+%             y = y-p; %subtract form data (i.e. flatten the data) 
+%             y = detrend(y); %remove linear trend
     
     
     
