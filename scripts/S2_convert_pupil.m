@@ -9,6 +9,8 @@ clear
 close all
 clc
 
+warning('off','all')
+
 %% add paths and set folder structure
 
 %root directory for this project
@@ -58,13 +60,13 @@ for fi = 1:length(filz) % looping through all files to process
     events_name = filename;
     
     fid = fopen(events_name);
-    event_text = textscan(fid,'%s%s%s%s%s%s%s%s%s%s%s','Headerlines',23,'ReturnOnError',0);
+    event_text = textscan(fid,'%s%s%s%s%s%s%s%s%s%s%s','Headerlines',1,'ReturnOnError',0);
     fclose(fid);
     
     % extracting starting time
     samples = size(event_text{1,1},1);
     firstsample_time = str2num(cell2mat(event_text{1,2}(1)));
-    convert2diam = 0;
+    convert2diam = nan;
     for i = 1:samples
         %this finds the time at which the experimental block started, using
         %an event in the data that signals it
@@ -75,8 +77,18 @@ for fi = 1:length(filz) % looping through all files to process
         if  strcmp(cell2mat(event_text{1,2}(i)),'AREA') == 1
             disp('AREA RECORDING DETECTED: Converting to Diameter')
             convert2diam = 1;
+        elseif   strcmp(cell2mat(event_text{1,2}(i)),'DIAMETER') == 1
+            disp('Pupil diameter correctly recorded')
+            convert2diam = 0;
         end
+    end   
+    
+    
+    if isnan(convert2diam)
+        error('No valid recording setup detected')
     end
+    
+    
     
     trl = 0;
     events = [];
